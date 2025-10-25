@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة الذكاء الاصطناعي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <!-- الجملة بتاعتك فوق يمين -->
+    <div class="creator">إنشاء وتطوير <span>أحمد جعفر</span></div>
+
+    <h1>🧮 حاسبة الذكاء الاصطناعي</h1>
+
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="about.html">حول</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="solver">
+      <h2>أدخل المسألة أو المعادلة</h2>
+      <textarea id="question" placeholder="مثلاً: 2x + 3 = 7 أو 5+3*2"></textarea>
+      <button id="solveBtn">حل المعادلة</button>
+
+      <div id="result">
+        <h3>🧩 النتيجة:</h3>
+        <p id="solution"></p>
+        <p id="steps"></p>
+      </div>
+    </section>
+
+    <section class="contact">
+      <h2>📩 تواصل معنا</h2>
+      <input id="name" placeholder="اسمك">
+      <textarea id="message" placeholder="رسالتك..."></textarea>
+      <button id="sendBtn">إرسال</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <script>
+    document.getElementById("solveBtn").addEventListener("click", async () => {
+      const question = document.getElementById("question").value;
+      const res = await fetch("/solve", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({question})
+      });
+      const data = await res.json();
+      document.getElementById("solution").innerText = data.solution;
+      document.getElementById("steps").innerText = data.steps;
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", async () => {
+      const name = document.getElementById("name").value;
+      const message = document.getElementById("message").value;
+      await fetch("/contact", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name, message})
+      });
+      alert("تم إرسال الرسالة بنجاح ✅");
+    });
+  </script>
+</body>
+</html>
